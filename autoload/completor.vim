@@ -41,6 +41,12 @@ function! s:on_text_change()
     return
   endif
 
+  let min_chars = g:completor_auto_complete_min_chars
+  let keyword = matchstr(strpart(getline('.'), 0, col('.')), '\k\+$')
+  if len(keyword) < min_chars
+    return
+  endif
+
   if !(exists('s:timer') && !empty(timer_info(s:timer)))
     let s:timer = timer_start(g:completor_completion_delay, {t->completor#do('complete')})
   endif
